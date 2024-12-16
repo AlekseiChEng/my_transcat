@@ -11,14 +11,17 @@ void TransportCatalogue::AddBus(const Bus& bus) {
   buses_.push_back(std::move(bus));
   buses_table_.insert({buses_.back().bus_name, &buses_.back()});
   for (const auto& stop : buses_.back().route) {
-    buses_via_stop_[stop].insert(bus.bus_name);
+    buses_via_stop_[stop->stop_name].insert(bus.bus_name);
   }
 }
 
 std::vector<std::string> TransportCatalogue::GetRoute(
     const std::string_view bus) const {
   std::vector<std::string> result;
-  result = (buses_table_.at(bus))->route;
+  for(const auto& ptr_stop: buses_table_.at(bus)->route){
+    result.push_back(ptr_stop->stop_name);
+  }
+  
   return result;
 }
 

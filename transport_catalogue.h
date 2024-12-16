@@ -18,7 +18,7 @@ struct BusStop {
 
 struct Bus {
   std::string bus_name;
-  std::vector<std::string> route;
+  std::vector<const BusStop*> route;
 };
 
 class TransportCatalogue {
@@ -29,7 +29,12 @@ class TransportCatalogue {
 
   std::vector<std::string> GetRoute(const std::string_view bus) const;
 
-  double ComputeRouteDist(const std::vector<std::string>& route) const;
+  const BusStop* GetStopPtr(std::string_view stop_name) const{
+    return stops_table_.at(stop_name);
+  }
+
+      double
+      ComputeRouteDist(const std::vector<std::string>& route) const;
 
   size_t ComputeUniqStops(const std::vector<std::string>& route) const;
 

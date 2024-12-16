@@ -96,7 +96,7 @@ void InputReader::ParseLine(std::string_view line) {
 }
 
 void inpreader::InputReader::ApplyCommands(
-    [[maybe_unused]] transcat::TransportCatalogue& catalogue) const {
+    transcat::TransportCatalogue& catalogue) const {
   for (const auto& command_description : commands_) {
     if (command_description.command == "Stop"sv) {
       transcat::BusStop bus_stop;
@@ -114,7 +114,9 @@ void inpreader::InputReader::ApplyCommands(
       std::vector<std::string_view> tmp =
           (detail::ParseRoute(command_description.description));
       for (std::string_view& stop : tmp) {
-        bus.route.push_back(std::string{stop});
+        const catalogue::transcat::BusStop* ptr_stop =
+            catalogue.GetStopPtr(stop);
+        bus.route.push_back(catalogue.GetStopPtr(stop));
       }
       catalogue.AddBus(bus);
     }
